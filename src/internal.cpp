@@ -987,4 +987,26 @@ bool Internal::traverse_clauses (ClauseIterator &it) {
   return true;
 }
 
+/*---------------------added by cl---------------------------------------------------*/
+double Internal::kalmanFilterPredict(double fastGlue)
+{   
+    //动态设置过程噪声：fastGlue值的1%作为过程噪声
+    // stats.kalman.Q = fastGlue * 0.01;
+    /* 预测 */
+    stats.kalman.fG_a = stats.kalman.fG_c;
+    stats.kalman.P_a = stats.kalman.P_b + stats.kalman.Q;
+    /* 修正 */
+    //获取观测值
+    stats.kalman.fG_b = fastGlue;
+    //计算卡尔曼增益
+    stats.kalman.K = stats.kalman.P_a / (stats.kalman.P_a + stats.kalman.R);   
+    //最佳估计值           
+    stats.kalman.fG_c = stats.kalman.fG_a + stats.kalman.K * (stats.kalman.fG_b - stats.kalman.fG_a);    
+    //最佳协方差
+    stats.kalman.P_b = (1 - stats.kalman.K) * stats.kalman.P_a;                
+    //返回修正估计值
+    return stats.kalman.fG_c;
+}
+
+
 } // namespace CaDiCaL

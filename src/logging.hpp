@@ -4,7 +4,15 @@
 /*------------------------------------------------------------------------*/
 #ifdef LOGGING
 /*------------------------------------------------------------------------*/
-
+/* ------added by cl------ */
+#include <mutex>
+#include <ctime>
+#include <fstream>
+#include <cstdarg>
+#include <sstream>
+#include <unistd.h> // For getpid()
+#include <iostream>
+/* ------ end ------ */
 #include <vector>
 
 namespace CaDiCaL {
@@ -20,7 +28,20 @@ struct Clause;
 struct Internal;
 
 struct Logger {
+/* ------added by cl------ */
+  static mutex mtx;
 
+  static void initialize(const char* base_file_path);
+  static void log_to_file(Internal* internal, const char* fmt, ...);
+  static std::string capture_log_prefix(Internal* internal);
+  static std::string log_file_path;
+  static std::string generate_unique_file_name(const char* base_file_path);
+
+  // static void log_to_file (Internal *, const char *file_path, const char *fmt, ...)
+  //     CADICAL_ATTRIBUTE_FORMAT (3, 4);
+  // static std::string capture_log_prefix(Internal* internal);
+  // static std::string generate_unique_file_name(const char* base_file_path);
+/* ------ end ------ */
   static void print_log_prefix (Internal *);
 
   // Simple logging of a C-style format string.
@@ -69,7 +90,16 @@ struct Logger {
       break; \
     Logger::log (internal, __VA_ARGS__); \
   } while (0)
-
+/* ------added by cl------ */
+#define LOG_TO_FILE(base_file_path, ...) \
+   do { \
+        if (Logger::log_file_path.empty()) { \
+            Logger::initialize(base_file_path); \
+        } \
+        Logger::log_to_file(internal, __VA_ARGS__); \
+    } while (0)
+//使用方法：LOG("/path/to/log.txt", "This is a log message");
+/* ------ end ------ */
 /*------------------------------------------------------------------------*/
 #else // end of 'then' part of 'ifdef LOGGING'
 /*------------------------------------------------------------------------*/
@@ -77,7 +107,12 @@ struct Logger {
 #define LOG(...) \
   do { \
   } while (0)
-
+/* ------added by cl------ */
+#define LOG_TO_FILE(base_file_path, ...) \
+    do { \
+        Logger::log_to_file(internal, base_file_path, __VA_ARGS__); \
+    } while (0)
+/* ------ end ------ */
 /*------------------------------------------------------------------------*/
 #endif // end of 'else' part of 'ifdef LOGGING'
 /*------------------------------------------------------------------------*/

@@ -6,9 +6,19 @@
 namespace CaDiCaL {
 
 struct Internal;
-
 struct Stats {
-
+  /*-------------added by cl-------------*/
+  struct{
+    double fG_a = -1;       //fastGlue估计值
+    double fG_b = -1;       //fastGlue测量值
+    double fG_c = 0;        //fastGlue修正估计值
+    double P_a = -1;        //先验估计协方差
+    double P_b = 1;         //后验最佳协方差
+    double K = -1;          //卡尔曼增益
+    double Q = 0.05;        //过程噪声方差
+    double R = 0.01;        //测量噪声方差
+  }kalman;
+  /*-------------------------------------*/
   Internal *internal;
 
   int64_t vars; // internal initialized variables
