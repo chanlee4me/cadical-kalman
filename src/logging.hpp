@@ -110,7 +110,6 @@ struct Logger {
 /* ------added by cl------ */
 #define LOG_TO_FILE(base_file_path, ...) \
     do { \
-        Logger::log_to_file(internal, base_file_path, __VA_ARGS__); \
     } while (0)
 /* ------ end ------ */
 /*------------------------------------------------------------------------*/
