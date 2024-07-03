@@ -993,7 +993,7 @@ double Internal::kalmanFilterPredict(double fastGlue)
     //手动初始化测量噪声
     stats.kalman.R = 0.000001;
     //手动初始化过程噪声
-    stats.kalman.Q = 0.0001;
+    stats.kalman.Q = 0.0005;
     //动态设置过程噪声：fastGlue值的1%作为过程噪声
     // stats.kalman.Q = fastGlue * 0.01;
     LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " 动态过程噪声 %f", stats.conflicts, stats.kalman.Q);
