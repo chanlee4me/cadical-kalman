@@ -991,19 +991,27 @@ bool Internal::traverse_clauses (ClauseIterator &it) {
 double Internal::kalmanFilterPredict(double fastGlue)
 {   
     //动态设置过程噪声：fastGlue值的1%作为过程噪声
-    // stats.kalman.Q = fastGlue * 0.01;
+    stats.kalman.Q = fastGlue * 0.01;
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.Q %f", stats.conflicts, stats.kalman.Q);
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " fast EMA glue %f", stats.conflicts, fastGlue);
     /* 预测 */
     stats.kalman.fG_a = stats.kalman.fG_c;
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.fG_c %f", stats.conflicts, stats.kalman.fG_c);
     stats.kalman.P_a = stats.kalman.P_b + stats.kalman.Q;
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.P_a %f", stats.conflicts, stats.kalman.P_a);
     /* 修正 */
     //获取观测值
     stats.kalman.fG_b = fastGlue;
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.fG_b %f", stats.conflicts, stats.kalman.fG_b);
     //计算卡尔曼增益
     stats.kalman.K = stats.kalman.P_a / (stats.kalman.P_a + stats.kalman.R);   
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.K %f", stats.conflicts, stats.kalman.K);
     //最佳估计值           
     stats.kalman.fG_c = stats.kalman.fG_a + stats.kalman.K * (stats.kalman.fG_b - stats.kalman.fG_a);    
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.fG_c %f", stats.conflicts, stats.kalman.fG_c);
     //最佳协方差
     stats.kalman.P_b = (1 - stats.kalman.K) * stats.kalman.P_a;                
+    LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " stats.kalman.P_b %f", stats.conflicts, stats.kalman.P_b);
     //返回修正估计值
     return stats.kalman.fG_c;
 }

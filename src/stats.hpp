@@ -15,8 +15,8 @@ struct Stats {
     double P_a = -1;        //先验估计协方差
     double P_b = 1;         //后验最佳协方差
     double K = -1;          //卡尔曼增益
-    double Q = 0.05;        //过程噪声方差
-    double R = 0.01;        //测量噪声方差
+    double Q = 0.0;        //过程噪声方差
+    double R = 0.0005;        //测量噪声方差
   }kalman;
   /*-------------------------------------*/
   Internal *internal;

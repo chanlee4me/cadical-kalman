@@ -75,7 +75,7 @@ bool Internal::restarting () {
   LOG ("EMA glue slow %.2f fast %.2f limit %.2f", s, f, l);
   /*---------------------added by cl---------------------------------------------------*/
   double predict = kalmanFilterPredict(f);
-  LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " slow EMA glue %f" " fast EMA glue %f" " kalman-fast EMA glue %f", stats.conflicts, s, f, predict);
+  // LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " slow EMA glue %f" " fast EMA glue %f" " kalman-fast EMA glue %f", stats.conflicts, s, f, predict);
   return l <= predict;
   // return l <= f;
 }
