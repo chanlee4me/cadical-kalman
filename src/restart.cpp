@@ -73,11 +73,8 @@ bool Internal::restarting () {
   double margin = (100.0 + opts.restartmargin) / 100.0;
   double s = averages.current.glue.slow, l = margin * s;
   LOG ("EMA glue slow %.2f fast %.2f limit %.2f", s, f, l);
-  /*---------------------added by cl---------------------------------------------------*/
-  double predict = kalmanFilterPredict(f);
-  // LOG_TO_FILE("/home/wgf/chenli/SAT/logging-kalman/log", "conflicts : %lld" " slow EMA glue %f" " fast EMA glue %f" " kalman-fast EMA glue %f", stats.conflicts, s, f, predict);
-  return l <= predict;
-  // return l <= f;
+
+  return l <= f;
 }
 
 // This is Marijn's reuse trail idea.  Instead of always backtracking to the

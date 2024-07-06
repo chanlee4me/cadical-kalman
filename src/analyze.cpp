@@ -1070,6 +1070,10 @@ void Internal::analyze () {
   const int glue = (int) levels.size () - 1;
   LOG (clause, "1st UIP size %d and glue %d clause", size, glue);
   UPDATE_AVERAGE (averages.current.glue.fast, glue);
+/*---------------------added by cl---------------------------------------------------*/
+  //计算最佳估计值
+  averages.current.glue.fast = kalmanFilterPredict(averages.current.glue.fast);
+/*---------------------    end     ---------------------------------------------------*/
   UPDATE_AVERAGE (averages.current.glue.slow, glue);
   stats.learned.literals += size;
   stats.learned.clauses++;
